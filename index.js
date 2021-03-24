@@ -1,7 +1,7 @@
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
-this.canvas.width = 400;
-this.canvas.height = 400;
+this.canvas.width = 600;
+this.canvas.height = 600;
 
 var keys = {};
 
@@ -56,6 +56,14 @@ var ground = new Box ({
     color: 'black',
 });
 
+var ground_2 = new Box ({
+    x: 200,
+    y: 300,
+    width: 70,
+    height: 10,
+    color: 'black',
+});
+
 function input(player) {
     if (37 in keys) {
     if (player.x - player.r - player.vx >= 0) {
@@ -75,12 +83,14 @@ function input(player) {
     }
     player.direction = 'up';
     }
+    /*
     if (40 in keys) {
     if (player.y + player.r + player.vy <= canvas.height){
         player.y += player.vy;
-    }
+    }   
     player.direction = 'down';
     }
+    */
 }
 
 function drawCircle(circle) {
@@ -90,35 +100,39 @@ function drawCircle(circle) {
     ctx.stroke();
 }
 
-function drawBox(ground){
+function drawBox(ground, ground_2){
     ctx.fillStyle = ground.color;
     ctx.fillRect(ground.x, ground.y, ground.width, ground.height);
+    ctx.fillStyle = ground_2.color;
+    ctx.fillRect(ground_2.x, ground_2.y, ground_2.width, ground_2.height);
 }
 
 function block() {
     if (player.y + player.r > ground.y && player.y + player.r < ground.y + ground.height && player.x + player.r <= ground.x + ground.width + 25 && player.x + player.r > ground.x ){
-        player.y == ground.y;
-    }else {
+        player.y + player.r == ground.y;
+    }else if (player.y + player.r > ground_2.y && player.y + player.r < ground_2.y + ground_2.height && player.x + player.r <= ground_2.x + ground_2.width + 25 && player.x + player.r > ground_2.x){
+        player.y + player.r == ground_2.y;
+    }
+    else {
         falling();
     }
 }
 
 function falling() {
-    if (player.y + player.r < canvas.width){
+    if (player.y + player.r <= canvas.width ){
         player.y += player.gravity;
     }
 }
 
-
 function update(){
     input(player);
+    block();
 }
 
 function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    block();
+    ctx.clearRect(0, 0, canvas.width, canvas.height); 
     drawCircle(player);
-    drawBox(ground);
+    drawBox(ground, ground_2);
     
 }
                                                         
